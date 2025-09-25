@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Request / Buy Services — Prashanta Bhusal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0d12;
+      --text:#eaeef2;
+      --muted:#a9b3b9;
+      --accent:#00ff88;
+      --border:rgba(255,255,255,0.08);
+      --card: rgba(20,25,32,0.95);
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);margin:0;line-height:1.5}
+    header{padding:20px;border-bottom:1px solid var(--border);text-align:center}
+    header h1{color:var(--accent);margin:0;font-size:1.4rem}
+    .wrap{max-width:1100px;margin:28px auto;padding:12px;display:grid;grid-template-columns:1fr 420px;gap:22px;align-items:stretch}
+    @media(max-width:1000px){ .wrap{grid-template-columns:1fr} }
+
+    /* Card */
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,0.6);display:flex;flex-direction:column;height:100%}
+    label{display:block;font-weight:600;color:var(--accent);margin-bottom:6px;font-size:0.95rem}
+    input[type="text"],input[type="email"],input[type="tel"],input[type="date"],input[type="number"],select,textarea{
+      width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:#11151d;color:var(--text);margin-bottom:14px;
+    }
+    select option{background:#11151d;color:var(--text);}
+    textarea{min-height:120px;resize:vertical}
+    .row{display:flex;gap:12px}
+    .row .col{flex:1}
+    .muted{color:var(--muted);font-size:0.95rem}
+    .price-box{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);margin-bottom:12px}
+    .price-line{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
+    .total{font-weight:800;font-size:1.15rem}
+    .btn{display:inline-block;padding:12px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--accent);color:#041014}
+    .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+    .small{font-size:0.9rem;color:var(--muted)}
+    .notice{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.08);padding:10px;border-radius:8px;color:var(--muted);margin-bottom:12px}
+    .section-title{font-size:1.05rem;color:var(--accent);margin-bottom:8px;font-weight:700}
+    .how-step{margin-bottom:12px}
+    .how-step b{color:var(--text)}
+    .hidden{display:none}
+    .copy-btn{background:transparent;border:1px solid var(--border);color:var(--accent);padding:6px 10px;border-radius:8px;cursor:pointer}
+    input[type="file"]{color:var(--muted);}
+
+    /* tiny toast */
+    #toast{position:fixed;right:20px;bottom:20px;padding:12px 16px;border-radius:10px;background:var(--accent);color:#041014;font-weight:700;display:none;z-index:999}
+    .field-hint{font-size:0.85rem;color:var(--muted);margin-top:-10px;margin-bottom:12px}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Request / Buy Services</h1>
+  <div class="small muted">Fill the form below — I’ll get back with a formal quote & next steps.</div>
+</header>
+
+<div class="wrap">
+
+  <!-- LEFT: Form -->
+  <div class="card" aria-labelledby="formTitle">
+    <h2 id="formTitle" class="section-title">Place your request</h2>
+
+    <form id="serviceForm" enctype="multipart/form-data">
+      <!-- CUSTOMER -->
+      <div class="row">
+        <div class="col">
+          <label for="name">Full name</label>
+          <input id="name" name="client_name" type="text" placeholder="John Doe" required>
+        </div>
+        <div class="col">
+          <label for="company">Company (optional)</label>
+          <input id="company" name="company" type="text" placeholder="Company / organization">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="email">Email</label>
+          <input id="email" name="client_email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="col">
+          <label for="phone">Phone / WhatsApp</label>
+          <input id="phone" name="client_phone" type="tel" placeholder="+977-98xxxxxxxx" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="website">Website (if any)</label>
+          <input id="website" name="website" type="text" placeholder="https://">
+        </div>
+        <div class="col">
+          <label for="deadline">Preferred deadline</label>
+          <input id="deadline" name="deadline" type="date">
+        </div>
+      </div>
+
+      <!-- SERVICE SELECTION -->
+      <label for="service">Select service & package</label>
+      <select id="service" name="selected_service" required>
+        <option value="" disabled selected>-- Choose a service & package --</option>
+
+        <optgroup label="🎨 Graphic Design">
+          <option value="Flyer Design">Flyer design — Rs. 150</option>
+          <option value="Visiting Card">Visiting card — Rs. 100</option>
+          <option value="Social Media Banners">Social media banners — Rs. 130</option>
+        </optgroup>
+
+        <optgroup label="✨ Logo Design">
+          <option value="Basic Logo">Basic logo (1 concept) — Rs. 200</option>
+          <option value="Premium Logo">Premium (3 concepts + revisions) — Rs. 400</option>
+          <option value="Full Brand Kit">Full brand kit — Rs. 500</option>
+        </optgroup>
+
+        <optgroup label="📊 Presentation Design">
+          <option value="Basic Presentation">Basic presentation (10 slides) — Rs. 100</option>
+          <option value="Premium Presentation">Premium (25 slides + revisions) — Rs. 600</option>
+          <option value="Custom Animations">Custom animations & graphics — Rs. 500</option>
+        </optgroup>
+
+        <optgroup label="💻 Web Development">
+          <option value="Basic Website">Basic website (5 pages) — Rs. 3000</option>
+          <option value="E-commerce Website">E-commerce website — Rs. 8000</option>
+          <option value="Custom Web App">Custom web app — Contact for quote</option>
+        </optgroup>
+
+        <optgroup label="📱 Social Media Management">
+          <option value="Basic Package">Basic package (10 posts) — Rs. 2000</option>
+          <option value="Growth Package">Growth package (30 posts + analytics) — Rs. 5000</option>
+          <option value="Full Campaign">Full campaign management — Rs. 9000</option>
+        </optgroup>
+      </select>
+
+      <!-- Dynamic quantity -->
+      <div id="quantityRow" class="row hidden">
+        <div class="col">
+          <label id="quantityLabel">Quantity</label>
+          <input id="quantity" name="quantity" type="number" min="1" value="1">
+          <div class="field-hint" id="quantityHint">Enter number of slides/pages/posts as applicable.</div>
+        </div>
+        <div class="col">
+          <label for="style">Preferred style</label>
+          <select id="style" name="preferred_style">
+            <option value="" selected>— Not specified —</option>
+            <option>Minimal / Clean</option>
+            <option>Bold & Colorful</option>
+            <option>Corporate / Professional</option>
+            <option>Handmade / Illustrative</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Add-ons -->
+      <div style="margin-bottom:12px">
+        <label>Add-ons / extras</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <label style="display:inline-flex;align-items:center;gap:8px"><input id="rush" name="rush" type="checkbox"> Rush delivery (+25%)</label>
+          <label style="display:inline-flex;align-items:center;gap:8px"><input id="srcFiles" name="source_files" type="checkbox"> Include source files (+Rs. 200)</label>
+          <label style="display:inline-flex;align-items:center;gap:8px"><input id="extraRevs" name="extra_revisions" type="checkbox"> Extra revisions (+Rs. 150)</label>
+        </div>
+      </div>
+
+      <!-- Attachments -->
+      <label for="attachments">Attach references (images, PDFs) — optional</label>
+      <input id="attachments" name="attachments" type="file" multiple accept=".png,.jpg,.jpeg,.pdf,.zip">
+
+      <!-- Budget (optional) -->
+      <label for="budget">Your budget (optional)</label>
+      <input id="budget" name="budget" type="number" min="0" placeholder="e.g. 3000 (Rs.)">
+
+      <!-- Message -->
+      <label for="message">Project details — be as specific as you can</label>
+      <textarea id="message" name="message" required></textarea>
+
+      <!-- PAYMENT METHOD -->
+      <label for="payment">Preferred payment method</label>
+      <select id="payment" name="payment_method" required>
+        <option value="" disabled selected>-- Choose a payment method --</option>
+        <option value="eSewa">eSewa (recommended for Nepal)</option>
+        <option value="PayLater">PayLater (buy now, pay later)</option>
+        <option value="Credit Card">Credit Card (secure payment link/invoice)</option>
+      </select>
+
+      <!-- Payment instruction fields (shown conditionally) -->
+      <div id="esewaBox" class="hidden">
+        <div class="notice">
+          <b>Pay with eSewa (recommended):</b>
+          Send the exact amount to the merchant account below, then paste the transaction/reference ID.
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+          <div>
+            <div class="small muted">Merchant / Payee</div>
+            <div style="font-weight:800;color:var(--text)">Prashanta Bhusal</div>
+            <div class="small muted">eSewa ID</div>
+            <div id="esewaMerchant" style="font-weight:800">YOUR_ESEWA_MERCHANT_ID</div>
+          </div>
+          <div style="margin-left:auto">
+            <button type="button" class="copy-btn" data-copy="#esewaMerchant">Copy eSewa ID</button>
+          </div>
+        </div>
+        <label for="esewaTx">eSewa transaction / reference ID (optional)</label>
+        <input id="esewaTx" name="esewa_transaction" type="text">
+      </div>
+
+      <div id="paylaterBox" class="hidden">
+        <div class="notice">
+          <b>PayLater:</b> Select PayLater if you prefer deferred payment option.
+        </div>
+        <label for="paylaterProvider">PayLater Provider (optional)</label>
+        <input id="paylaterProvider" name="paylater_provider" type="text">
+        <label for="paylaterTx">PayLater transaction / reference ID (optional)</label>
+        <input id="paylaterTx" name="paylater_transaction" type="text">
+      </div>
+
+      <div id="ccBox" class="hidden">
+        <div class="notice">
+          <b>Credit Card payments:</b> You’ll get a secure Stripe Checkout link via email.
+        </div>
+        <label><input id="depositAgree" name="deposit_agree" type="checkbox"> I agree to receive a secure invoice/payment link</label>
+      </div>
+
+      <!-- Terms -->
+      <div style="margin-top:12px">
+        <label><input id="terms" type="checkbox" required> I have read the process & revision policy and accept terms (see right panel).</label>
+      </div>
+
+      <div style="margin-top:16px;display:flex;gap:12px;align-items:center">
+        <button class="btn primary" type="submit">Send Request</button>
+        <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- RIGHT: Summary & How it works -->
+  <aside>
+    <div class="card">
+      <h3 class="section-title">Price summary</h3>
+      <div class="price-box" id="priceBox">
+        <div class="price-line"><div class="small">Base price</div><div id="basePrice">—</div></div>
+        <div class="price-line"><div class="small">Quantity / pages</div><div id="qtyText">—</div></div>
+        <div class="price-line"><div class="small">Add-ons</div><div id="addonsText">—</div></div>
+        <div class="price-line"><div class="small">Subtotal</div><div id="subTotal">Rs. 0</div></div>
+        <div class="price-line"><div class="small">VAT (13%)</div><div id="vat">Rs. 0</div></div>
+        <div class="price-line total"><div>Total</div><div id="grandTotal">Rs. 0</div></div>
+      </div>
+
+      <h3 class="section-title">How the process works</h3>
+      <div class="how-step"><b>1. Send Request</b><div class="muted">Describe your needs & attach references. I'll confirm receipt.</div></div>
+      <div class="how-step"><b>2. Proposal & Quote</b><div class="muted">I review and send a formal quote & timeline.</div></div>
+      <div class="how-step"><b>3. Payment & Kickoff</b><div class="muted">Typically 50% deposit required to start. Work begins after payment.</div></div>
+      <div class="how-step"><b>4. Research & Concepts</b><div class="muted">I produce initial drafts within agreed timelines.</div></div>
+      <div class="how-step"><b>5. Revisions</b><div class="muted">Up to 2 rounds of revisions included. Extra billed separately.</div></div>
+      <div class="how-step"><b>6. Delivery</b><div class="muted">Final files delivered after payment. Source files if selected.</div></div>
+
+      
+      <div style="margin-top:12px" class="small muted">
+        <b>Refund & cancellations</b><br>
+        Small jobs: refundable before work begins. After work begins, refunds are partial (time & work considered). Large projects: terms are set in the quote.
+      </div>
+    </div>
+
+      
+
+</div>
+
+<div id="toast"></div>
+ <script>
+  const ESEWA_MERCHANT = "9766654639"; // eSewa merchant ID
+  const VAT_PERCENT = 13;
+
+  const PRICES = {
+    "Flyer Design": 150,
+    "Visiting Card": 100,
+    "Social Media Banners": 130,
+    "Basic Logo": 200,
+    "Premium Logo": 400,
+    "Full Brand Kit": 500,
+    "Basic Presentation": 100,
+    "Premium Presentation": 600,
+    "Custom Animations": 500,
+    "Basic Website": 3000,
+    "E-commerce Website": 8000,
+    "Custom Web App": null,
+    "Basic Package": 2000,
+    "Growth Package": 5000,
+    "Full Campaign": 9000
+  };
+
+  // form elements
+  const serviceEl = document.getElementById('service');
+  const qtyRow = document.getElementById('quantityRow');
+  const qtyInput = document.getElementById('quantity');
+  const qtyLabel = document.getElementById('quantityLabel');
+  const qtyHint = document.getElementById('quantityHint');
+  const basePriceEl = document.getElementById('basePrice');
+  const qtyTextEl = document.getElementById('qtyText');
+  const addonsTextEl = document.getElementById('addonsText');
+  const subTotalEl = document.getElementById('subTotal');
+  const vatEl = document.getElementById('vat');
+  const grandTotalEl = document.getElementById('grandTotal');
+  const esewaBox = document.getElementById('esewaBox');
+  const paylaterBox = document.getElementById('paylaterBox');
+  const ccBox = document.getElementById('ccBox');
+  document.getElementById('esewaMerchant').textContent = ESEWA_MERCHANT;
+
+  // copy buttons
+  document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click', () => {
+      const sel = document.querySelector(btn.dataset.copy);
+      if(sel){
+        navigator.clipboard.writeText(sel.textContent.trim()).then(()=> showToast('Copied!'));
+      }
+    });
+  });
+
+  function numberFormat(n){ return new Intl.NumberFormat('en-IN').format(n); }
+
+  function onServiceChange(){
+    const v = serviceEl.value;
+    const price = PRICES[v];
+    if(price === undefined) {
+      basePriceEl.textContent = "—";
+      qtyRow.classList.add('hidden');
+      qtyInput.value = 1;
+      qtyTextEl.textContent = "—";
+      updateTotals();
+      return;
+    }
+
+    if(v.includes("Presentation")){
+      qtyLabel.textContent = "Slides";
+      qtyHint.textContent = "Number of slides.";
+      qtyRow.classList.remove('hidden');
+      if(qtyInput.value < 1) qtyInput.value = 10;
+    } else if(v.includes("Website")){
+      qtyLabel.textContent = "Pages";
+      qtyHint.textContent = "Number of pages.";
+      qtyRow.classList.remove('hidden');
+      if(qtyInput.value < 1) qtyInput.value = 5;
+    } else if(v.includes("Package") || v.includes("Social")){
+      qtyLabel.textContent = "Quantity";
+      qtyHint.textContent = "Number of items.";
+      qtyRow.classList.remove('hidden');
+      if(qtyInput.value < 1) qtyInput.value = 1;
+    } else if(v === "Custom Web App" || price === null){
+      qtyRow.classList.add('hidden');
+      qtyInput.value = 1;
+    } else {
+      qtyLabel.textContent = "Quantity";
+      qtyHint.textContent = "Usually 1.";
+      qtyRow.classList.remove('hidden');
+      if(qtyInput.value < 1) qtyInput.value = 1;
+    }
+
+    basePriceEl.textContent = (price === null ? "Contact for quote" : `Rs. ${numberFormat(price)}`);
+    qtyTextEl.textContent = qtyInput.value;
+    updateTotals();
+  }
+
+  function updateTotals(){
+    const v = serviceEl.value;
+    const base = PRICES[v];
+    if(base === undefined || base === null){
+      subTotalEl.textContent = "Rs. 0";
+      vatEl.textContent = "Rs. 0";
+      grandTotalEl.textContent = "Rs. 0";
+      addonsTextEl.textContent = "—";
+      return;
+    }
+
+    let qty = Number(qtyInput.value || 1);
+    if(qty < 1) qty = 1;
+    let subtotal = base * qty;
+
+    let addons = [];
+    if(document.getElementById('srcFiles').checked){ subtotal += 200; addons.push('Source files +Rs.200'); }
+    if(document.getElementById('extraRevs').checked){ subtotal += 150; addons.push('Extra revisions +Rs.150'); }
+    if(document.getElementById('rush').checked){
+      const rushAmount = Math.round(subtotal * 0.25);
+      subtotal += rushAmount;
+      addons.push(`Rush +25% ≈ Rs.${numberFormat(rushAmount)}`);
+    }
+
+    const vat = Math.round(subtotal * (VAT_PERCENT/100));
+    const total = subtotal + vat;
+
+    subTotalEl.textContent = `Rs. ${numberFormat(subtotal)}`;
+    vatEl.textContent = `Rs. ${numberFormat(vat)}`;
+    grandTotalEl.textContent = `Rs. ${numberFormat(total)}`;
+    qtyTextEl.textContent = qty;
+    addonsTextEl.textContent = addons.length ? addons.join(', ') : '—';
+    basePriceEl.textContent = `Rs. ${numberFormat(base)}`;
+  }
+
+  serviceEl.addEventListener('change', onServiceChange);
+  qtyInput.addEventListener('input', ()=>{ qtyTextEl.textContent = qtyInput.value; updateTotals(); });
+  document.getElementById('rush').addEventListener('change', updateTotals);
+  document.getElementById('srcFiles').addEventListener('change', updateTotals);
+  document.getElementById('extraRevs').addEventListener('change', updateTotals);
+
+  document.getElementById('payment').addEventListener('change', function(){
+    esewaBox.classList.add('hidden');
+    paylaterBox.classList.add('hidden');
+    ccBox.classList.add('hidden');
+    if(this.value === 'eSewa') esewaBox.classList.remove('hidden');
+    if(this.value === 'PayLater') paylaterBox.classList.remove('hidden');
+    if(this.value === 'Credit Card') ccBox.classList.remove('hidden');
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', ()=>{
+    document.getElementById('serviceForm').reset();
+    qtyInput.value = 1;
+    qtyRow.classList.add('hidden');
+    esewaBox.classList.add('hidden');
+    paylaterBox.classList.add('hidden');
+    ccBox.classList.add('hidden');
+    updateTotals();
+  });
+
+  function showToast(msg, t=2400){
+    const el=document.getElementById('toast');
+    el.textContent=msg; el.style.display='block';
+    setTimeout(()=> el.style.display='none', t);
+  }
+
+  // ---------- FORM SUBMIT via Formcarry ----------
+  document.getElementById('serviceForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    if(!name || !email || !phone || !serviceEl.value){
+      showToast('Please fill required fields.');
+      return;
+    }
+
+    updateTotals();
+
+    // attach hidden fields
+    ['_psub','_pvat','_ptotal','_pbase','_pqty','_paddons'].forEach(id=>{
+      const ex=document.getElementById(id);
+      if(ex) ex.remove();
+    });
+    function appendHidden(name,val){
+      const i=document.createElement('input');
+      i.type='hidden'; i.id=name; i.name=name; i.value=val;
+      document.getElementById('serviceForm').appendChild(i);
+    }
+    appendHidden('_pbase', basePriceEl.textContent);
+    appendHidden('_pqty', qtyTextEl.textContent);
+    appendHidden('_paddons', addonsTextEl.textContent);
+    appendHidden('_psub', subTotalEl.textContent);
+    appendHidden('_pvat', vatEl.textContent);
+    appendHidden('_ptotal', grandTotalEl.textContent);
+
+    showToast('Sending request…');
+
+    try {
+      let resp = await fetch("https://formcarry.com/s/YA3W-BHccPn", {
+        method:"POST",
+        body:new FormData(this),
+        headers:{ Accept:"application/json" }
+      });
+      if(resp.ok){
+        showToast('✅ Request sent — check your email for confirmation.');
+        handlePostSubmit(document.getElementById('payment').value);
+        this.reset();
+        qtyInput.value=1;
+        qtyRow.classList.add('hidden');
+        updateTotals();
+      } else {
+        showToast('❌ Failed to send request.');
+      }
+    } catch(err){
+      console.error(err);
+      showToast('❌ Network error.');
+    }
+  });
+
+  function handlePostSubmit(paymentMethod){
+    if(paymentMethod==='eSewa'){
+      alert(`Thanks — request received!
+Please pay the total shown to eSewa ID: ${ESEWA_MERCHANT}.
+Reply with transaction ID for confirmation.`);
+    } else if(paymentMethod==='PayLater'){
+      alert("Thanks — request received! I'll send PayLater instructions soon.");
+    } else if(paymentMethod==='Credit Card'){
+      alert("Thanks — request received! You'll get a secure card payment link soon.");
+    } else {
+      alert("Thanks — request received! I’ll contact you with a quote and next steps.");
+    }
+  }
+
+  updateTotals();
+</script>
+
+</body>
+</html>

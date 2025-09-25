@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hire Me - Prashanta Bhusal</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --accent: #06d6a0;
+      --accent-2: #00cc6a;
+      --bg-dark: #0f0f0f;
+      --bg-card: #1a1a1a;
+      --text-light: #f5f5f5;
+      --text-muted: #bbbbbb;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: var(--bg-dark);
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: var(--bg-card);
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      text-align: center;
+      transform: translateY(40px);
+      opacity: 0;
+      animation: slideFadeIn 1s ease forwards;
+    }
+    @keyframes slideFadeIn {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+    p {
+      margin-bottom: 30px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    form {
+      text-align: left;
+    }
+    .form-group {
+      margin-bottom: 18px;
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+    }
+    .form-group:nth-child(1){ animation-delay: 0.3s; }
+    .form-group:nth-child(2){ animation-delay: 0.45s; }
+    .form-group:nth-child(3){ animation-delay: 0.6s; }
+    .form-group:nth-child(4){ animation-delay: 0.75s; }
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    input, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      background: #111;
+      color: var(--text-light);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(6,214,160,0.3);
+    }
+    textarea { resize: vertical; }
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: var(--accent-2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: var(--accent-2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hire Me</h1>
+    <p>Fill out the form below to start your next project with me.</p>
+
+    <!-- ✅ Formspree Integration -->
+    <form action="https://formcarry.com/s/YA3W-BHccPn" method="POST">
+      <div class="form-group">
+        <input type="text" name="name" placeholder="Your Name" required />
+      </div>
+      <div class="form-group">
+        <input type="email" name="email" placeholder="Your Email" required />
+      </div>
+      <div class="form-group">
+        <input type="text" name="subject" placeholder="Project Subject" required />
+      </div>
+      <div class="form-group">
+        <textarea name="message" rows="5" placeholder="Tell me about your project..." required></textarea>
+      </div>
+      <button type="submit">Send Request</button>
+    </form>
+
+    <a href="index.html" class="back-link">← Back to Home</a>
+  </div>
+</body>
+</html>
