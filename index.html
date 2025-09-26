@@ -4,6 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Prashanta Bhusal — Portfolio</title>
+    <link rel="icon" type="image/png" href="logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
@@ -849,45 +850,93 @@ section{
   section { padding: 24px 16px; }
   .hero { padding: 48px 16px 28px; min-height: 60vh; }
 }
-/* Back to Top Button */
-#backToTop {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 45px;
-  height: 45px;
-  border: none;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  font-size: 22px;
-  font-weight: bold;
-  cursor: pointer;
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0.8);
-  transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
 
-/* Show state */
-#backToTop.show {
-  opacity: 1;
-  visibility: visible;
-  transform: scale(1);
-}
-
-/* Hover effect */
-#backToTop:hover {
-  background: var(--accent-2);
-  transform: scale(1.1);
-}
-
+/* ===== Loader Wrapper ===== */
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #0a0d12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loader-content {
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+    .loader-logo {
+      font-family: "Poppins", sans-serif;
+      font-weight: 800;
+      font-size: 3.2rem;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+      user-select: none;
+    }
+    .loader-logo .p { color: var(--accent); text-shadow: 0 0 12px #00ff8855; }
+    .loader-logo .b { color: var(--text); }
+    .loader-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-family: "Poppins", sans-serif;
+      letter-spacing: 1px;
+    }
+    .line-loader {
+      width: 160px;
+      height: 4px;
+      background: #1a1a1a;
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+      margin: 0 auto;
+      box-shadow: 0 0 12px #00ff8840;
+    }
+    .line-loader::before {
+      content: "";
+      position: absolute;
+      left: -40%;
+      top: 0;
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, var(--accent), #00cc6a 80%);
+      animation: slide 1.2s infinite ease-in-out;
+      border-radius: 2px;
+      box-shadow: 0 0 8px #00ff8850;
+    }
+    @keyframes slide {
+      0% { left: -40%; }
+      50% { left: 100%; }
+      100% { left: -40%; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px);}
+      to   { opacity: 1; transform: translateY(0);}
+    }
   </style>
 </head>
 <body>
-
+  <!-- ===== Loading Screen ===== -->
+  <div id="loader">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <span class="p">P</span><span class="b">B</span>
+      </div>
+      <div class="loader-text">Prashanta Bhusal</div>
+      <div class="line-loader"></div>
+    </div>
+  </div>
   <!-- Navbar -->
   <header>
     <div class="logo">PB <span>| Prashanta Bhusal</span></div>
@@ -1524,6 +1573,13 @@ window.addEventListener("scroll", () => {
   });
 })();
 </script>
-
+<script>
+    // Loader hide logic
+    window.addEventListener("load", function() {
+      setTimeout(function() {
+        document.getElementById("loader").classList.add("hidden");
+      }, 700); // 0.7s delay for effect
+    });
+  </script>
 </body>
 </html>
